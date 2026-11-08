@@ -1,1 +1,525 @@
+<!DOCTYPE html>
 
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MTA Work Equipment OT Call List</title>
+
+<style>
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: linear-gradient(135deg, #dceeff, #ffffff);
+
+    color: #17365d;
+
+}
+
+header {
+
+    background: #1769aa;
+
+    color: white;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+header img {
+
+    width: 90px;
+
+    height: auto;
+
+    background: white;
+
+    border-radius: 8px;
+
+    padding: 5px;
+
+}
+
+header h1 {
+
+    font-size: 23px;
+
+    margin: 0;
+
+}
+
+header p {
+
+    margin: 6px 0 0;
+
+    font-size: 14px;
+
+}
+
+nav {
+
+    background: #104c80;
+
+    padding: 12px;
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+nav button {
+
+    background: #287fbd;
+
+    color: white;
+
+    border: 1px solid white;
+
+    padding: 12px 20px;
+
+    border-radius: 5px;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+}
+
+nav button:hover {
+
+    background: #0d385e;
+
+}
+
+.container {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 20px;
+
+}
+
+.department {
+
+    background: white;
+
+    margin-bottom: 25px;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    box-shadow: 0 3px 10px #00000018;
+
+}
+
+.department h2 {
+
+    background: #1769aa;
+
+    color: white;
+
+    padding: 14px;
+
+    margin: 0;
+
+    font-size: 19px;
+
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+th {
+
+    background: #d5e9fa;
+
+    color: #17365d;
+
+}
+
+th, td {
+
+    padding: 12px 8px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+tr:nth-child(even) {
+
+    background: #f2f7fc;
+
+}
+
+footer {
+
+    text-align: center;
+
+    padding: 20px;
+
+    color: #456;
+
+    font-size: 13px;
+
+}
+
+.page {
+
+    display: none;
+
+}
+
+.page.active {
+
+    display: block;
+
+}
+
+@media(max-width:600px) {
+
+    header h1 {
+
+        font-size: 19px;
+
+    }
+
+    header img {
+
+        width: 70px;
+
+    }
+
+    th, td {
+
+        padding: 9px 4px;
+
+        font-size: 12px;
+
+    }
+
+    nav button {
+
+        padding: 10px;
+
+        font-size: 13px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <img src="MTA-logo.jpg" alt="MTA Logo">
+
+    <div>
+
+        <h1>MTA WORK EQUIPMENT</h1>
+
+        <p>OVERTIME CALL LIST</p>
+
+    </div>
+
+</header>
+
+<nav>
+
+    <button onclick="showPage('call')">OT Call List</button>
+
+    <button onclick="showPage('history')">OT History</button>
+
+    <button onclick="showPage('admin')">Administration</button>
+
+</nav>
+
+<div class="container">
+
+<section id="call" class="page active">
+
+<div class="department">
+
+<h2>CAR INSPECTORS (17)</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Rank</th>
+
+<th>Seniority</th>
+
+<th>Employee</th>
+
+<th>OT Hours</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ci-list"></tbody>
+
+</table>
+
+</div>
+
+<div class="department">
+
+<h2>PAINTERS (4)</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Rank</th>
+
+<th>Seniority</th>
+
+<th>Employee</th>
+
+<th>OT Hours</th>
+
+</tr>
+
+</thead>
+
+<tbody id="painter-list"></tbody>
+
+</table>
+
+</div>
+
+<div class="department">
+
+<h2>CTA</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Seniority</th>
+
+<th>Employee</th>
+
+</tr>
+
+</thead>
+
+<tbody id="cta-list"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<section id="history" class="page">
+
+<div class="department">
+
+<h2>OVERTIME HOURS HISTORY</h2>
+
+<p style="padding:20px">
+
+Historical OT records will be developed in the next stage.
+
+</p>
+
+</div>
+
+</section>
+
+<section id="admin" class="page">
+
+<div class="department">
+
+<h2>ADMINISTRATION</h2>
+
+<p style="padding:20px">
+
+Employee management and OT record controls
+
+will be developed in the next stage.
+
+</p>
+
+</div>
+
+</section>
+
+</div>
+
+<footer>
+
+MTA Work Equipment OT Call List
+
+</footer>
+
+<script>
+
+// Temporary sample employees.
+
+// Replace these with the actual roster later.
+
+const employees = {
+
+    ci: Array.from({length:17}, (_,i) => ({
+
+        seniority:i+1,
+
+        name:"CI Employee "+(i+1),
+
+        hours:(i+1)*8
+
+    })),
+
+    painter: Array.from({length:4}, (_,i) => ({
+
+        seniority:i+18,
+
+        name:"Painter "+(i+1),
+
+        hours:(i+1)*8
+
+    })),
+
+    cta: [{
+
+        seniority:22,
+
+        name:"CTA Employee"
+
+    }]
+
+};
+
+function displayEmployees() {
+
+    function sortEmployees(list) {
+
+        return [...list].sort((a,b) =>
+
+            a.hours-b.hours || a.seniority-b.seniority
+
+        );
+
+    }
+
+    document.getElementById("ci-list").innerHTML =
+
+        sortEmployees(employees.ci).map((e,i) => `
+
+        <tr>
+
+        <td>${i+1}</td>
+
+        <td>${e.seniority}</td>
+
+        <td>${e.name}</td>
+
+        <td>${e.hours}</td>
+
+        </tr>
+
+        `).join("");
+
+    document.getElementById("painter-list").innerHTML =
+
+        sortEmployees(employees.painter).map((e,i) => `
+
+        <tr>
+
+        <td>${i+1}</td>
+
+        <td>${e.seniority}</td>
+
+        <td>${e.name}</td>
+
+        <td>${e.hours}</td>
+
+        </tr>
+
+        `).join("");
+
+    document.getElementById("cta-list").innerHTML =
+
+        employees.cta.map(e => `
+
+        <tr>
+
+        <td>${e.seniority}</td>
+
+        <td>${e.name}</td>
+
+        </tr>
+
+        `).join("");
+
+}
+
+function showPage(page) {
+
+    document.querySelectorAll(".page").forEach(p =>
+
+        p.classList.remove("active")
+
+    );
+
+    document.getElementById(page).classList.add("active");
+
+}
+
+displayEmployees();
+
+</script>
+
+</body>
+
+</html>
