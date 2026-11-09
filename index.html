@@ -1,525 +1,681 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>MTA Work Equipment OT Call List</title>
 
 <style>
-
 * {
-
     box-sizing: border-box;
-
 }
 
 body {
-
     margin: 0;
-
     font-family: Arial, sans-serif;
-
-    background: linear-gradient(135deg, #dceeff, #ffffff);
-
-    color: #17365d;
-
+    background: #f2f4f7;
+    color: #222;
 }
 
 header {
-
-    background: #1769aa;
-
+    background: #003b71;
     color: white;
+    padding: 15px;
+    text-align: center;
+}
 
-    padding: 20px;
-
+.header-content {
     display: flex;
-
     align-items: center;
-
-    gap: 20px;
-
+    justify-content: center;
+    gap: 15px;
     flex-wrap: wrap;
-
 }
 
 header img {
-
-    width: 90px;
-
-    height: auto;
-
-    background: white;
-
-    border-radius: 8px;
-
-    padding: 5px;
-
+    max-width: 85px;
+    max-height: 65px;
+    object-fit: contain;
 }
 
 header h1 {
-
-    font-size: 23px;
-
-    margin: 0;
-
-}
-
-header p {
-
-    margin: 6px 0 0;
-
-    font-size: 14px;
-
+    font-size: 22px;
+    margin: 5px 0;
 }
 
 nav {
-
-    background: #104c80;
-
-    padding: 12px;
-
     display: flex;
-
     justify-content: center;
-
     flex-wrap: wrap;
-
-    gap: 10px;
-
+    background: #002b50;
 }
 
 nav button {
-
-    background: #287fbd;
-
+    border: none;
+    background: transparent;
     color: white;
-
-    border: 1px solid white;
-
-    padding: 12px 20px;
-
-    border-radius: 5px;
-
+    padding: 14px 18px;
     font-size: 15px;
-
     cursor: pointer;
-
 }
 
-nav button:hover {
-
-    background: #0d385e;
-
+nav button.active {
+    background: #0072bc;
 }
 
 .container {
-
-    max-width: 1100px;
-
+    max-width: 1000px;
     margin: auto;
-
-    padding: 20px;
-
-}
-
-.department {
-
-    background: white;
-
-    margin-bottom: 25px;
-
-    border-radius: 8px;
-
-    overflow: hidden;
-
-    box-shadow: 0 3px 10px #00000018;
-
-}
-
-.department h2 {
-
-    background: #1769aa;
-
-    color: white;
-
-    padding: 14px;
-
-    margin: 0;
-
-    font-size: 19px;
-
-}
-
-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-}
-
-th {
-
-    background: #d5e9fa;
-
-    color: #17365d;
-
-}
-
-th, td {
-
-    padding: 12px 8px;
-
-    text-align: center;
-
-    border-bottom: 1px solid #ddd;
-
-}
-
-tr:nth-child(even) {
-
-    background: #f2f7fc;
-
-}
-
-footer {
-
-    text-align: center;
-
-    padding: 20px;
-
-    color: #456;
-
-    font-size: 13px;
-
+    padding: 15px;
 }
 
 .page {
-
     display: none;
-
 }
 
 .page.active {
-
     display: block;
-
 }
 
-@media(max-width:600px) {
+h2 {
+    color: #003b71;
+    margin-bottom: 5px;
+}
 
+.date-display {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.section-title {
+    background: #003b71;
+    color: white;
+    padding: 10px;
+    margin-top: 22px;
+    font-size: 18px;
+    border-radius: 4px 4px 0 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-bottom: 10px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px 7px;
+    text-align: center;
+    font-size: 14px;
+}
+
+th {
+    background: #e1eaf2;
+    color: #003b71;
+}
+
+td.employee-name {
+    text-align: left;
+}
+
+.action-select {
+    padding: 7px;
+    width: 100%;
+    max-width: 100px;
+}
+
+.call-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 22px 0;
+    flex-wrap: wrap;
+}
+
+.main-button {
+    border: none;
+    border-radius: 5px;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.call-button {
+    background: #0072bc;
+    color: white;
+}
+
+.complete-button {
+    background: #198754;
+    color: white;
+}
+
+.main-button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+.status-message {
+    text-align: center;
+    font-size: 14px;
+    margin: 10px 0;
+    color: #555;
+}
+
+.footnote {
+    background: black;
+    color: white;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.8;
+    border-radius: 3px;
+}
+
+.placeholder {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 15px;
+    line-height: 1.7;
+}
+
+footer {
+    text-align: center;
+    background: #003b71;
+    color: white;
+    padding: 12px;
+    margin-top: 30px;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
     header h1 {
-
-        font-size: 19px;
-
-    }
-
-    header img {
-
-        width: 70px;
-
+        font-size: 18px;
     }
 
     th, td {
-
-        padding: 9px 4px;
-
+        padding: 8px 4px;
         font-size: 12px;
-
     }
 
     nav button {
-
-        padding: 10px;
-
+        padding: 12px 10px;
         font-size: 13px;
-
     }
 
+    .main-button {
+        padding: 11px 18px;
+    }
 }
-
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-    <img src="./mta-logo.jpg" alt="MTA Logo" style="width:100px; height:auto; display:block;">
-
-    <div>
-
-        <h1>MTA WORK EQUIPMENT</h1>
-
-        <p>OVERTIME CALL LIST</p>
-
+    <div class="header-content">
+        <img src="./mta-logo.jpg" alt="MTA Logo">
+        <h1>MTA WORK EQUIPMENT<br>OVERTIME CALL LIST</h1>
     </div>
-
 </header>
 
 <nav>
+    <button class="active" onclick="showPage('callList', this)">
+        OT Call List
+    </button>
 
-    <button onclick="showPage('call')">OT Call List</button>
+    <button onclick="showPage('history', this)">
+        OT History
+    </button>
 
-    <button onclick="showPage('history')">OT History</button>
-
-    <button onclick="showPage('admin')">Administration</button>
-
+    <button onclick="showPage('admin', this)">
+        Administration
+    </button>
 </nav>
 
 <div class="container">
 
-<section id="call" class="page active">
+    <!-- OT CALL LIST PAGE -->
 
-<div class="department">
+    <section id="callList" class="page active">
 
-<h2>CAR INSPECTORS (17)</h2>
+        <h2>Overtime Call List</h2>
 
-<table>
+        <div class="date-display" id="currentDate"></div>
 
-<thead>
+        <div class="call-controls">
+            <button id="callButton"
+                    class="main-button call-button"
+                    onclick="startCall()">
+                CALL
+            </button>
 
-<tr>
+            <button id="completeButton"
+                    class="main-button complete-button"
+                    onclick="completeCall()"
+                    disabled>
+                COMPLETE CALL
+            </button>
+        </div>
 
-<th>Rank</th>
+        <div class="status-message" id="callStatus">
+            Call session is not active.
+        </div>
 
-<th>Seniority</th>
+        <div class="section-title">CAR INSPECTORS</div>
 
-<th>Employee</th>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Employee</th>
+                    <th>Current OT Hours</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="ciTable"></tbody>
+        </table>
 
-<th>OT Hours</th>
+        <div class="section-title">PAINTERS</div>
 
-</tr>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Employee</th>
+                    <th>Current OT Hours</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="painterTable"></tbody>
+        </table>
 
-</thead>
+        <div class="section-title">CTA</div>
 
-<tbody id="ci-list"></tbody>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="ctaTable"></tbody>
+        </table>
 
-</table>
+        <div class="footnote">
+            <strong>OT ACTION KEY</strong><br>
+            P = Pay<br>
+            S = Save<br>
+            C = Change<br>
+            N/C = No Change
+            <hr>
+            Employees are ranked by lowest accumulated OT hours.
+            Ties are determined by seniority.
+        </div>
 
-</div>
+    </section>
 
-<div class="department">
 
-<h2>PAINTERS (4)</h2>
+    <!-- OT HISTORY PAGE -->
 
-<table>
+    <section id="history" class="page">
 
-<thead>
+        <h2>Overtime Hours List</h2>
 
-<tr>
+        <p>
+            Historical overtime records will be displayed here.
+        </p>
 
-<th>Rank</th>
+        <table>
+            <thead>
+                <tr>
+                    <th>Seniority</th>
+                    <th>Employee</th>
+                    <th>Prep Booth</th>
+                    <th>OT History</th>
+                </tr>
+            </thead>
 
-<th>Seniority</th>
+            <tbody id="historyTable"></tbody>
+        </table>
 
-<th>Employee</th>
+        <div class="footnote">
+            * = Prep Booth qualified
+        </div>
 
-<th>OT Hours</th>
+    </section>
 
-</tr>
 
-</thead>
+    <!-- ADMINISTRATION PAGE -->
 
-<tbody id="painter-list"></tbody>
+    <section id="admin" class="page">
 
-</table>
+        <h2>Administration</h2>
 
-</div>
+        <div class="placeholder">
 
-<div class="department">
+            <strong>Employee Management</strong>
 
-<h2>CTA</h2>
+            <p>
+                This section will allow authorized administrators
+                to manage employee information.
+            </p>
 
-<table>
+            <ul>
+                <li>Edit employee names.</li>
+                <li>Update seniority numbers.</li>
+                <li>Manage department assignments.</li>
+                <li>Set Prep Booth qualification to Yes or No.</li>
+                <li>Update accumulated overtime hours.</li>
+            </ul>
 
-<thead>
+            <p>
+                Secure administrator access and permanent data
+                storage will be added in a later development stage.
+            </p>
 
-<tr>
+        </div>
 
-<th>Seniority</th>
-
-<th>Employee</th>
-
-</tr>
-
-</thead>
-
-<tbody id="cta-list"></tbody>
-
-</table>
-
-</div>
-
-</section>
-
-<section id="history" class="page">
-
-<div class="department">
-
-<h2>OVERTIME HOURS HISTORY</h2>
-
-<p style="padding:20px">
-
-Historical OT records will be developed in the next stage.
-
-</p>
-
-</div>
-
-</section>
-
-<section id="admin" class="page">
-
-<div class="department">
-
-<h2>ADMINISTRATION</h2>
-
-<p style="padding:20px">
-
-Employee management and OT record controls
-
-will be developed in the next stage.
-
-</p>
-
-</div>
-
-</section>
+    </section>
 
 </div>
 
 <footer>
-
-MTA Work Equipment OT Call List
-
+    MTA Work Equipment — Overtime Call List
 </footer>
+
 
 <script>
 
-// Temporary sample employees.
+/*
+   SAMPLE EMPLOYEE DATA
 
-// Replace these with the actual roster later.
+   These are temporary example entries.
+   We will replace them with your actual employee roster.
+*/
 
 const employees = {
 
-    ci: Array.from({length:17}, (_,i) => ({
+    ci: [
+        { name: "CI Employee 1", seniority: 1, hours: 40, prep: true },
+        { name: "CI Employee 2", seniority: 2, hours: 32, prep: false },
+        { name: "CI Employee 3", seniority: 3, hours: 48, prep: true },
+        { name: "CI Employee 4", seniority: 4, hours: 24, prep: false },
+        { name: "CI Employee 5", seniority: 5, hours: 56, prep: false },
+        { name: "CI Employee 6", seniority: 6, hours: 40, prep: true },
+        { name: "CI Employee 7", seniority: 7, hours: 32, prep: false },
+        { name: "CI Employee 8", seniority: 8, hours: 48, prep: false },
+        { name: "CI Employee 9", seniority: 9, hours: 24, prep: true },
+        { name: "CI Employee 10", seniority: 10, hours: 56, prep: false },
+        { name: "CI Employee 11", seniority: 11, hours: 40, prep: false },
+        { name: "CI Employee 12", seniority: 12, hours: 32, prep: true },
+        { name: "CI Employee 13", seniority: 13, hours: 48, prep: false },
+        { name: "CI Employee 14", seniority: 14, hours: 24, prep: false },
+        { name: "CI Employee 15", seniority: 15, hours: 56, prep: true },
+        { name: "CI Employee 16", seniority: 16, hours: 40, prep: false },
+        { name: "CI Employee 17", seniority: 17, hours: 32, prep: false }
+    ],
 
-        seniority:i+1,
+    painters: [
+        { name: "Painter Employee 1", seniority: 18, hours: 32, prep: false },
+        { name: "Painter Employee 2", seniority: 19, hours: 24, prep: true },
+        { name: "Painter Employee 3", seniority: 20, hours: 40, prep: false },
+        { name: "Painter Employee 4", seniority: 21, hours: 32, prep: false }
+    ],
 
-        name:"CI Employee "+(i+1),
-
-        hours:(i+1)*8
-
-    })),
-
-    painter: Array.from({length:4}, (_,i) => ({
-
-        seniority:i+18,
-
-        name:"Painter "+(i+1),
-
-        hours:(i+1)*8
-
-    })),
-
-    cta: [{
-
-        seniority:22,
-
-        name:"CTA Employee"
-
-    }]
+    cta: [
+        { name: "CTA Employee", seniority: 22, prep: false }
+    ]
 
 };
 
-function displayEmployees() {
 
-    function sortEmployees(list) {
+/* DISPLAY NEW YORK DATE */
 
-        return [...list].sort((a,b) =>
+function updateDate() {
 
-            a.hours-b.hours || a.seniority-b.seniority
+    const now = new Date();
 
-        );
+    const formatted = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "America/New_York"
+    }).format(now);
 
-    }
+    document.getElementById("currentDate").textContent = formatted;
+}
 
-    document.getElementById("ci-list").innerHTML =
+updateDate();
+setInterval(updateDate, 60000);
 
-        sortEmployees(employees.ci).map((e,i) => `
 
-        <tr>
+/* NAVIGATION */
 
-        <td>${i+1}</td>
+function showPage(pageId, button) {
 
-        <td>${e.seniority}</td>
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
 
-        <td>${e.name}</td>
+    document.getElementById(pageId).classList.add("active");
 
-        <td>${e.hours}</td>
+    document.querySelectorAll("nav button").forEach(btn => {
+        btn.classList.remove("active");
+    });
 
-        </tr>
+    button.classList.add("active");
+}
 
-        `).join("");
 
-    document.getElementById("painter-list").innerHTML =
+/* SORT EMPLOYEES */
 
-        sortEmployees(employees.painter).map((e,i) => `
+function sortEmployees(list) {
 
-        <tr>
+    return [...list].sort((a, b) => {
 
-        <td>${i+1}</td>
+        if (a.hours !== b.hours) {
+            return a.hours - b.hours;
+        }
 
-        <td>${e.seniority}</td>
+        return a.seniority - b.seniority;
 
-        <td>${e.name}</td>
-
-        <td>${e.hours}</td>
-
-        </tr>
-
-        `).join("");
-
-    document.getElementById("cta-list").innerHTML =
-
-        employees.cta.map(e => `
-
-        <tr>
-
-        <td>${e.seniority}</td>
-
-        <td>${e.name}</td>
-
-        </tr>
-
-        `).join("");
+    });
 
 }
 
-function showPage(page) {
 
-    document.querySelectorAll(".page").forEach(p =>
+/* CREATE ACTION SELECTOR */
 
-        p.classList.remove("active")
+function createActionSelector() {
 
+    const select = document.createElement("select");
+
+    select.className = "action-select";
+    select.disabled = true;
+
+    const options = [
+        ["", "--"],
+        ["P", "P"],
+        ["S", "S"],
+        ["C", "C"],
+        ["N/C", "N/C"]
+    ];
+
+    options.forEach(option => {
+
+        const item = document.createElement("option");
+
+        item.value = option[0];
+        item.textContent = option[1];
+
+        select.appendChild(item);
+
+    });
+
+    return select;
+
+}
+
+
+/* BUILD CI AND PAINTER TABLES */
+
+function buildDepartmentTable(list, tableId) {
+
+    const table = document.getElementById(tableId);
+
+    table.innerHTML = "";
+
+    const sorted = sortEmployees(list);
+
+    sorted.forEach((employee, index) => {
+
+        const row = document.createElement("tr");
+
+        const rank = document.createElement("td");
+        rank.textContent = index + 1;
+
+        const name = document.createElement("td");
+        name.className = "employee-name";
+        name.textContent = employee.name;
+
+        const hours = document.createElement("td");
+        hours.textContent = employee.hours;
+
+        const action = document.createElement("td");
+        action.appendChild(createActionSelector());
+
+        row.appendChild(rank);
+        row.appendChild(name);
+        row.appendChild(hours);
+        row.appendChild(action);
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* BUILD CTA TABLE */
+
+function buildCTATable() {
+
+    const table = document.getElementById("ctaTable");
+
+    table.innerHTML = "";
+
+    employees.cta.forEach(employee => {
+
+        const row = document.createElement("tr");
+
+        const name = document.createElement("td");
+        name.className = "employee-name";
+        name.textContent = employee.name;
+
+        const action = document.createElement("td");
+        action.appendChild(createActionSelector());
+
+        row.appendChild(name);
+        row.appendChild(action);
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* BUILD HISTORY TABLE */
+
+function buildHistoryTable() {
+
+    const table = document.getElementById("historyTable");
+
+    table.innerHTML = "";
+
+    const allEmployees = [
+        ...employees.ci,
+        ...employees.painters,
+        ...employees.cta
+    ].sort((a, b) => a.seniority - b.seniority);
+
+    allEmployees.forEach(employee => {
+
+        const row = document.createElement("tr");
+
+        const seniority = document.createElement("td");
+        seniority.textContent = employee.seniority;
+
+        const name = document.createElement("td");
+        name.className = "employee-name";
+
+        name.textContent =
+            employee.name + (employee.prep ? "*" : "");
+
+        const prep = document.createElement("td");
+        prep.textContent = employee.prep ? "Yes" : "No";
+
+        const history = document.createElement("td");
+        history.textContent = "—";
+
+        row.appendChild(seniority);
+        row.appendChild(name);
+        row.appendChild(prep);
+        row.appendChild(history);
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* INITIAL DISPLAY */
+
+buildDepartmentTable(employees.ci, "ciTable");
+buildDepartmentTable(employees.painters, "painterTable");
+buildCTATable();
+buildHistoryTable();
+
+
+/* CALL WORKFLOW */
+
+function startCall() {
+
+    const password = prompt(
+        "Administrator authentication is not connected yet."
     );
 
-    document.getElementById(page).classList.add("active");
+    if (password === null) {
+        return;
+    }
+
+    alert(
+        "The secure administrator login has not been connected yet. " +
+        "We will add server-side password verification in the next stage."
+    );
 
 }
 
-displayEmployees();
+
+/* COMPLETE CALL */
+
+function completeCall() {
+
+    alert(
+        "The permanent call-record saving function has not been connected yet."
+    );
+
+}
 
 </script>
 
 </body>
-
 </html>
