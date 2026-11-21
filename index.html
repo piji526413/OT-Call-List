@@ -693,6 +693,152 @@ footer {
 #adminLoginContainer[hidden] {
     display: none !important;
 }
+/* MANAGE EMPLOYEES PAGE */
+
+#manageEmployeesPage[hidden] {
+    display: none !important;
+}
+
+.manage-employees-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+.manage-employees-heading {
+    color: #002653;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 24px;
+}
+
+.manage-employees-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.back-to-admin-button,
+.add-employee-button {
+    border: none;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.back-to-admin-button {
+    background: #e8eef5;
+    color: #002653;
+}
+
+.add-employee-button {
+    background: #198754;
+    color: #ffffff;
+}
+
+.manage-department {
+    margin-bottom: 24px;
+    border: 1px solid #d4dce6;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.manage-department h3 {
+    background: #002653;
+    color: #ffffff;
+    padding: 12px 16px;
+    margin: 0;
+    font-size: 16px;
+}
+
+.manage-employees-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.manage-employees-table th {
+    background: #e4edf7;
+    color: #002653;
+    font-weight: 700;
+    padding: 12px 8px;
+    text-align: center;
+}
+
+.manage-employees-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #dce3ec;
+    text-align: center;
+}
+
+.manage-employees-table tbody tr:nth-child(odd) {
+    background: #ffffff;
+}
+
+.manage-employees-table tbody tr:nth-child(even) {
+    background: #f0f5fb;
+}
+
+.manage-edit-button,
+.manage-remove-button {
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 3px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.manage-edit-button {
+    background: #1769aa;
+}
+
+.manage-remove-button {
+    background: #c62828;
+}
+
+.manage-employees-page button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#manageEmployeesMessage {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .manage-employees-heading {
+        font-size: 20px;
+    }
+
+    .manage-employees-table {
+        font-size: 12px;
+    }
+
+    .manage-employees-table th,
+    .manage-employees-table td {
+        padding: 10px 5px;
+    }
+
+    .manage-edit-button,
+    .manage-remove-button {
+        padding: 7px 10px;
+        font-size: 12px;
+    }
+}
+
+/* END MANAGE EMPLOYEES PAGE */
 </style>
  <link rel="stylesheet" href="./admin-login.css">
 </head>
@@ -1118,7 +1264,105 @@ footer {
     </button>
 
 </div>
+<!-- MANAGE EMPLOYEES PAGE -->
 
+<div id="manageEmployeesPage"
+     class="manage-employees-page"
+     hidden>
+
+    <h2 class="manage-employees-heading">
+        MANAGE EMPLOYEES
+    </h2>
+
+    <div class="manage-employees-toolbar">
+
+        <button type="button"
+                id="backToAdminButton"
+                class="back-to-admin-button"
+                disabled>
+            &#8592; Back to Administration
+        </button>
+
+        <button type="button"
+                id="addEmployeeButton"
+                class="add-employee-button"
+                disabled>
+            + ADD EMPLOYEE
+        </button>
+
+    </div>
+
+    <div id="manageEmployeesMessage"
+         role="status">
+    </div>
+
+    <!-- CAR INSPECTORS -->
+
+    <div class="manage-department">
+
+        <h3>CAR INSPECTORS</h3>
+
+        <table class="manage-employees-table">
+            <thead>
+                <tr>
+                    <th>Seniority</th>
+                    <th>Name</th>
+                    <th>Prep Booth</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="manageCITable">
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- PAINTERS -->
+
+    <div class="manage-department">
+
+        <h3>PAINTERS</h3>
+
+        <table class="manage-employees-table">
+            <thead>
+                <tr>
+                    <th>Seniority</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="managePainterTable">
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- CTA -->
+
+    <div class="manage-department">
+
+        <h3>CTA</h3>
+
+        <table class="manage-employees-table">
+            <thead>
+                <tr>
+                    <th>Seniority</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="manageCTATable">
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<!-- END MANAGE EMPLOYEES PAGE -->
 </section>
 
 
@@ -1352,6 +1596,7 @@ const adminDashboard = document.getElementById("adminDashboard");
 const adminLogoutButton = document.getElementById("adminLogoutButton");
 
 function showAdminDashboard() {
+    hideManageEmployeesPage();
     adminLoginContainer.hidden = true;
     adminDashboard.hidden = false;
     adminLoginMessage.textContent = "";
@@ -1359,6 +1604,7 @@ function showAdminDashboard() {
 }
 
 function showAdminLogin() {
+    hideManageEmployeesPage();
     adminDashboard.hidden = true;
     adminLoginContainer.hidden = false;
     adminPinInput.value = "";
@@ -1433,8 +1679,70 @@ adminLoginCancel.addEventListener("click", () => {
 
 });
 
+/* MANAGE EMPLOYEES NAVIGATION */
 
-/* ADMINISTRATOR LOGOUT */
+const manageEmployeesButton =
+    document.getElementById("manageEmployeesButton");
+
+const manageEmployeesPage =
+    document.getElementById("manageEmployeesPage");
+
+const backToAdminButton =
+    document.getElementById("backToAdminButton");
+
+function hideManageEmployeesPage() {
+    manageEmployeesPage.hidden = true;
+}
+
+manageEmployeesButton.disabled = false;
+backToAdminButton.disabled = false;
+
+manageEmployeesButton.addEventListener("click", async () => {
+    manageEmployeesButton.disabled = true;
+
+    try {
+        const valid = await validateAdminSession();
+
+        if (!valid) {
+            hideManageEmployeesPage();
+            showAdminLogin();
+            return;
+        }
+
+        adminDashboard.hidden = true;
+        manageEmployeesPage.hidden = false;
+
+    } catch (error) {
+        alert("Unable to verify administrator session. Please try again.");
+
+    } finally {
+        manageEmployeesButton.disabled = false;
+    }
+});
+
+backToAdminButton.addEventListener("click", async () => {
+    backToAdminButton.disabled = true;
+
+    try {
+        const valid = await validateAdminSession();
+
+        hideManageEmployeesPage();
+
+        if (valid) {
+            showAdminDashboard();
+        } else {
+            showAdminLogin();
+        }
+
+    } catch (error) {
+        alert("Unable to verify administrator session. Please try again.");
+
+    } finally {
+        backToAdminButton.disabled = false;
+    }
+});
+
+/* END MANAGE EMPLOYEES NAVIGATION */
 
 /* ADMINISTRATOR LOGOUT */
 adminLogoutButton.addEventListener("click", async () => {
