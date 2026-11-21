@@ -885,11 +885,21 @@ footer {
 
     </div>
 
+
 <!-- ADMINISTRATION DASHBOARD -->
 
 <div id="adminDashboard" class="admin-dashboard" hidden>
 
     <div class="admin-auth-status">
+        <svg class="admin-status-icon"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             aria-hidden="true">
+            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+            <path d="m9 12 2 2 4-4"/>
+        </svg>
         Administrator authenticated
     </div>
 
@@ -900,13 +910,35 @@ footer {
                 class="admin-menu-button"
                 disabled>
 
-            <span class="admin-menu-title">
-                Manage Employees
+            <svg class="admin-menu-icon"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.9"/>
+                <path d="M16 3.1a4 4 0 0 1 0 7.8"/>
+            </svg>
+
+            <span class="admin-menu-content">
+                <span class="admin-menu-title">
+                    Manage Employees
+                </span>
+                <span class="admin-menu-description">
+                    Add, edit and remove employees.
+                </span>
             </span>
 
-            <span class="admin-menu-description">
-                Add, edit and remove employees.
-            </span>
+            <svg class="admin-menu-arrow"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 aria-hidden="true">
+                <path d="m9 18 6-6-6-6"/>
+            </svg>
 
         </button>
 
@@ -915,13 +947,35 @@ footer {
                 class="admin-menu-button"
                 disabled>
 
-            <span class="admin-menu-title">
-                Adjust OT Hours
+            <svg class="admin-menu-icon"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16"/>
+                <circle cx="8" cy="7" r="2" fill="white"/>
+                <circle cx="16" cy="12" r="2" fill="white"/>
+                <circle cx="10" cy="17" r="2" fill="white"/>
+            </svg>
+
+            <span class="admin-menu-content">
+                <span class="admin-menu-title">
+                    Adjust OT Hours
+                </span>
+                <span class="admin-menu-description">
+                    Adjust accumulated OT hours and view adjustment history.
+                </span>
             </span>
 
-            <span class="admin-menu-description">
-                Adjust accumulated OT hours and view adjustment history.
-            </span>
+            <svg class="admin-menu-arrow"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 aria-hidden="true">
+                <path d="m9 18 6-6-6-6"/>
+            </svg>
 
         </button>
 
@@ -930,13 +984,35 @@ footer {
                 class="admin-menu-button"
                 disabled>
 
-            <span class="admin-menu-title">
-                New Job Pick
+            <svg class="admin-menu-icon"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 aria-hidden="true">
+                <path d="M20 7v5h-5"/>
+                <path d="M4 17v-5h5"/>
+                <path d="M5.6 8a7 7 0 0 1 11.6-2L20 12"/>
+                <path d="M4 12l2.8 6A7 7 0 0 0 18.4 16"/>
+            </svg>
+
+            <span class="admin-menu-content">
+                <span class="admin-menu-title">
+                    New Job Pick
+                </span>
+                <span class="admin-menu-description">
+                    Initialize a new overtime cycle.
+                </span>
             </span>
 
-            <span class="admin-menu-description">
-                Initialize a new overtime cycle.
-            </span>
+            <svg class="admin-menu-arrow"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 aria-hidden="true">
+                <path d="m9 18 6-6-6-6"/>
+            </svg>
 
         </button>
 
@@ -946,6 +1022,17 @@ footer {
             id="adminLogoutButton"
             class="admin-logout-button"
             disabled>
+
+        <svg class="admin-logout-icon"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             aria-hidden="true">
+            <path d="M10 17l5-5-5-5"/>
+            <path d="M15 12H3"/>
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        </svg>
 
         Logout
 
