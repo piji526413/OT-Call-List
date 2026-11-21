@@ -1,0 +1,170 @@
+
+/* OTCS ADMINISTRATOR LOGIN */
+
+.admin-login-page {
+    background: #eaf1f8;
+    min-height: 65vh;
+    padding: 40px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-login-page[hidden] {
+    display: none !important;
+}
+
+
+/* LOGIN CARD */
+
+.admin-login-card {
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d3dce6;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 16px rgba(0, 38, 83, 0.12);
+}
+
+.admin-login-icon {
+    display: flex;
+    justify-content: center;
+    color: #002653;
+    margin-bottom: 16px;
+}
+
+.admin-login-icon svg {
+    width: 42px;
+    height: 42px;
+}
+
+.admin-login-title {
+    color: #002653;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 12px;
+}
+
+.admin-login-description {
+    color: #64748b;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+
+/* PIN INPUT */
+
+.admin-pin-label {
+    display: block;
+    color: #334155;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.admin-pin-input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 52px;
+    border: 1px solid #b8c5d3;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #002653;
+    font-size: 24px;
+    letter-spacing: 10px;
+    text-align: center;
+}
+
+.admin-pin-input:focus {
+    outline: 2px solid #0072bc;
+    outline-offset: 2px;
+}
+
+
+/* LOGIN ERROR MESSAGE */
+
+.admin-login-error {
+    color: #b91c1c;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    margin: 12px 0;
+}
+
+
+/* LOGIN BUTTONS */
+
+.admin-login-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.admin-login-buttons button {
+    flex: 1;
+    min-height: 44px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.admin-login-submit {
+    background: #002653;
+    color: #ffffff;
+}
+
+.admin-login-cancel {
+    background: #e5e7eb;
+    color: #334155;
+}
+
+.admin-login-submit:hover:not(:disabled) {
+    background: #003b71;
+}
+
+.admin-login-cancel:hover:not(:disabled) {
+    background: #d1d5db;
+}
+
+.admin-login-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* AUTHORIZATION NOTICE */
+
+.admin-login-note {
+    border-top: 1px solid #d3dce6;
+    margin-top: 24px;
+    padding-top: 16px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* IPHONE RESPONSIVE DESIGN */
+
+@media (max-width: 480px) {
+
+    .admin-login-page {
+        padding: 24px 12px;
+    }
+
+    .admin-login-card {
+        padding: 24px 20px;
+    }
+
+    .admin-login-title {
+        font-size: 22px;
+    }
+
+}
