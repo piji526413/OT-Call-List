@@ -394,6 +394,122 @@ footer {
         width: 20%;
     }
 }
+ 
+/* ADMINISTRATOR LOGIN */
+
+.admin-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 420px;
+    padding: 30px 15px;
+    background: #eaf1f8;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.admin-login-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #d5dee8;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 38, 83, 0.12);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.admin-lock-icon {
+    width: 48px;
+    height: 48px;
+    color: #002653;
+    margin-bottom: 12px;
+}
+
+.admin-login-card h2 {
+    color: #002653;
+    font-size: 24px;
+    margin: 0 0 12px;
+}
+
+.admin-login-description {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+#adminLoginForm label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #002653;
+    margin-bottom: 8px;
+}
+
+#adminPin {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    text-align: center;
+    border: 1px solid #b8c6d5;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+#adminPin:focus {
+    outline: 2px solid #1565c0;
+    outline-offset: 1px;
+}
+
+.admin-login-message {
+    min-height: 20px;
+    margin: 10px 0;
+    color: #c62828;
+    font-size: 13px;
+}
+
+.admin-login-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.admin-login-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#adminLoginButton {
+    background: #1565c0;
+    color: #ffffff;
+}
+
+#adminLoginCancel {
+    background: #e5e7eb;
+    color: #334155;
+}
+
+.admin-login-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin-login-note {
+    margin-top: 22px;
+    padding: 12px;
+    background: #eff6ff;
+    border-radius: 6px;
+    color: #475569;
+    font-size: 13px;
+}
+
 </style>
  <link rel="stylesheet" href="./admin-login.css">
 </head>
@@ -592,16 +708,81 @@ footer {
 
     <!-- ADMINISTRATION PAGE -->
 
-    <section id="admin" class="page">
+    
+<section id="admin" class="page">
 
-        <h2 class="page-heading">ADMINISTRATION</h2>
+    <h2 class="page-heading">ADMINISTRATION</h2>
 
-        <div class="placeholder">
-            The secure Administration Dashboard
-            is under development.
+    <div class="admin-login-container">
+
+        <div class="admin-login-card" id="adminLoginCard">
+
+            <svg class="admin-lock-icon"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 aria-hidden="true">
+                <rect x="4" y="10" width="16" height="12" rx="2"/>
+                <path d="M8 10V6a4 4 0 0 1 8 0v4"/>
+                <circle cx="12" cy="16" r="1"/>
+            </svg>
+
+            <h2>Administrator Login</h2>
+
+            <p class="admin-login-description">
+                Enter your administrator PIN to continue.
+            </p>
+
+            <form id="adminLoginForm">
+
+                <label for="adminPin">Administrator PIN</label>
+
+                <input
+                    type="password"
+                    id="adminPin"
+                    inputmode="numeric"
+                    pattern="[0-9]{4}"
+                    minlength="4"
+                    maxlength="4"
+                    placeholder="Enter 4-digit PIN"
+                    autocomplete="off"
+                    required
+                >
+
+                <div id="adminLoginMessage"
+                     class="admin-login-message"
+                     role="alert">
+                </div>
+
+                <div class="admin-login-buttons">
+
+                    <button type="submit"
+                            id="adminLoginButton"
+                            disabled>
+                        Login
+                    </button>
+
+                    <button type="button"
+                            id="adminLoginCancel"
+                            disabled>
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+            <div class="admin-login-note">
+                Authorized shop stewards only.
+            </div>
+
         </div>
 
-    </section>
+    </div>
+
+</section>
+
 
 </main>
 
@@ -809,6 +990,83 @@ async function initializeEmployeeDisplay() {
 }
 
 initializeEmployeeDisplay();
+
+/* ADMINISTRATOR LOGIN CONTROLS */
+
+const adminLoginForm =
+    document.getElementById("adminLoginForm");
+
+const adminPinInput =
+    document.getElementById("adminPin");
+
+const adminLoginMessage =
+    document.getElementById("adminLoginMessage");
+
+const adminLoginButton =
+    document.getElementById("adminLoginButton");
+
+const adminLoginCancel =
+    document.getElementById("adminLoginCancel");
+
+
+adminLoginButton.disabled = false;
+adminLoginCancel.disabled = false;
+
+
+adminLoginForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const pin = adminPinInput.value;
+
+    adminLoginMessage.textContent = "";
+
+    adminLoginButton.disabled = true;
+    adminLoginCancel.disabled = true;
+    adminPinInput.disabled = true;
+
+    adminLoginButton.textContent = "Logging in...";
+
+    try {
+
+        await adminLogin(pin);
+
+        adminLoginMessage.style.color = "#198754";
+
+        adminLoginMessage.textContent =
+            "Administrator login successful.";
+
+    } catch (error) {
+
+        adminLoginMessage.style.color = "#c62828";
+
+        adminLoginMessage.textContent = error.message;
+
+    } finally {
+
+        adminPinInput.value = "";
+        adminPinInput.disabled = false;
+
+        adminLoginButton.disabled = false;
+        adminLoginCancel.disabled = false;
+
+        adminLoginButton.textContent = "Login";
+
+    }
+
+});
+
+
+adminLoginCancel.addEventListener("click", () => {
+
+    adminPinInput.value = "";
+    adminLoginMessage.textContent = "";
+
+    clearAdminSession();
+
+    adminPinInput.focus();
+
+});
 
 </script>
 
