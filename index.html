@@ -892,7 +892,7 @@ footer {
 
     <h2 class="page-heading">ADMINISTRATION</h2>
 
-    <div class="admin-login-container">
+   <div class="admin-login-container" id="adminLoginContainer">
 
         <div class="admin-login-card" id="adminLoginCard">
 
@@ -1343,6 +1343,25 @@ const adminLoginCancel =
     document.getElementById("adminLoginCancel");
 
 
+const adminLoginContainer = document.getElementById("adminLoginContainer");
+const adminDashboard = document.getElementById("adminDashboard");
+const adminLogoutButton = document.getElementById("adminLogoutButton");
+
+function showAdminDashboard() {
+    adminLoginContainer.hidden = true;
+    adminDashboard.hidden = false;
+    adminLoginMessage.textContent = "";
+    adminLogoutButton.disabled = false;
+}
+
+function showAdminLogin() {
+    adminDashboard.hidden = true;
+    adminLoginContainer.hidden = false;
+    adminPinInput.value = "";
+    adminLoginMessage.textContent = "";
+    adminLogoutButton.disabled = true;
+}
+
 adminLoginButton.disabled = false;
 adminLoginCancel.disabled = false;
 
@@ -1361,18 +1380,24 @@ adminLoginForm.addEventListener("submit", async (event) => {
 
     adminLoginButton.textContent = "Logging in...";
 
-    try {
+    
+try {
+    await adminLogin(pin);
 
-        await adminLogin(pin);
+    const valid = await validateAdminSession();
 
-        adminLoginMessage.style.color = "#198754";
+    if (!valid) {
+        throw new Error("Invalid administrator session.");
+    }
 
-        adminLoginMessage.textContent =
-            "Administrator login successful.";
+    showAdminDashboard();
 
-    } catch (error) {
+    
+} catch (error) {
+    clearAdminSession();
+    showAdminLogin();
+    adminLoginMessage.style.color = "#c62828";
 
-        adminLoginMessage.style.color = "#c62828";
 
         adminLoginMessage.textContent = error.message;
 
@@ -1391,12 +1416,27 @@ adminLoginForm.addEventListener("submit", async (event) => {
 });
 
 
+
 adminLoginCancel.addEventListener("click", () => {
 
-    adminPinInput.value = "";
-    adminLoginMessage.textContent = "";
+    clearAdminSession();
+
+    showAdminLogin();
+
+    const homeButton = document.querySelector("nav button");
+
+    showPage("callList", homeButton);
+
+});
+
+
+/* ADMINISTRATOR LOGOUT */
+
+adminLogoutButton.addEventListener("click", () => {
 
     clearAdminSession();
+
+    showAdminLogin();
 
     adminPinInput.focus();
 
