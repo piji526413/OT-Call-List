@@ -86,3 +86,46 @@ function clearAdminSession() {
     adminSessionToken = null;
     adminSessionExpiresAt = 0;
 }
+
+/* SERVER-SIDE SESSION VALIDATION */
+
+async function validateAdminSession() {
+
+    const token = getAdminToken();
+
+    if (!token) {
+        return false;
+    }
+
+    const response = await fetch(
+        SUPABASE_FUNCTIONS_URL + "/admin-validate",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_PUBLISHABLE_KEY
+            },
+            body: JSON.stringify({ token: token }),
+            cache: "no-store"
+        }
+    );
+
+    const result = await response.json();
+
+    if (response.status === 401) {
+
+        clearAdminSession();
+
+        return false;
+    }
+
+    if (!response.ok) {
+
+        throw new Error(
+            result.error || "Session validation unavailable."
+        );
+    }
+
+    return result.valid === true &&
+        getAdminToken() === token;
+}
