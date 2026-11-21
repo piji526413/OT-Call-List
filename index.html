@@ -1436,14 +1436,23 @@ adminLoginCancel.addEventListener("click", () => {
 
 /* ADMINISTRATOR LOGOUT */
 
-adminLogoutButton.addEventListener("click", () => {
+/* ADMINISTRATOR LOGOUT */
+adminLogoutButton.addEventListener("click", async () => {
+    adminLogoutButton.disabled = true;
 
-    clearAdminSession();
+    try {
+        await adminLogout();
+        showAdminLogin();
+        adminPinInput.focus();
 
-    showAdminLogin();
+    } catch (error) {
+        alert(
+            "Logout could not be confirmed by the server. " +
+            "Please try again."
+        );
 
-    adminPinInput.focus();
-
+        adminLogoutButton.disabled = false;
+    }
 });
 
 </script>
