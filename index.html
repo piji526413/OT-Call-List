@@ -510,6 +510,110 @@ footer {
     font-size: 13px;
 }
 
+/* ADMINISTRATION DASHBOARD */
+
+.admin-dashboard[hidden] {
+    display: none !important;
+}
+
+.admin-dashboard {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    box-sizing: border-box;
+}
+
+.admin-auth-status {
+    color: #198754;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.admin-dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-menu-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #d5dee8;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 38, 83, 0.08);
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.admin-menu-button:not(:disabled):hover {
+    background: #f0f6fc;
+    border-color: #1565c0;
+}
+
+.admin-menu-title {
+    color: #002653;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.admin-menu-description {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.admin-menu-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.admin-logout-button {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    background: #002653;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-logout-button:not(:disabled):hover {
+    background: #003b71;
+}
+
+.admin-logout-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .admin-dashboard {
+        padding: 16px 8px;
+    }
+
+    .admin-menu-button {
+        padding: 18px;
+    }
+
+    .admin-menu-title {
+        font-size: 18px;
+    }
+}
+
 </style>
  <link rel="stylesheet" href="./admin-login.css">
 </head>
