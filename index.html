@@ -606,44 +606,13 @@ footer {
 
 <script>
 
-/* TEMPORARY SAMPLE EMPLOYEES */
+/* LIVE EMPLOYEE DATA */
 
-/* TEMPORARY SAMPLE EMPLOYEES */
-const employees = {
-
-    ci: [
-        { name: "CI Employee 1", seniority: 1, hours: 40 },
-        { name: "CI Employee 2", seniority: 2, hours: 32 },
-        { name: "CI Employee 3", seniority: 3, hours: 48 },
-        { name: "CI Employee 4", seniority: 4, hours: 24 },
-        { name: "CI Employee 5", seniority: 5, hours: 56 },
-        { name: "CI Employee 6", seniority: 6, hours: 40 },
-        { name: "CI Employee 7", seniority: 7, hours: 32 },
-        { name: "CI Employee 8", seniority: 8, hours: 48 },
-        { name: "CI Employee 9", seniority: 9, hours: 24 },
-        { name: "CI Employee 10", seniority: 10, hours: 56 },
-        { name: "CI Employee 11", seniority: 11, hours: 40 },
-        { name: "CI Employee 12", seniority: 12, hours: 32 },
-        { name: "CI Employee 13", seniority: 13, hours: 48 },
-        { name: "CI Employee 14", seniority: 14, hours: 24 },
-        { name: "CI Employee 15", seniority: 15, hours: 56 },
-        { name: "CI Employee 16", seniority: 16, hours: 40 },
-        { name: "CI Employee 17", seniority: 17, hours: 32 }
-    ],
-
-    painters: [
-        { name: "Painter Employee 1", seniority: 19, hours: 32 },
-        { name: "Painter Employee 2", seniority: 20, hours: 24 },
-        { name: "Painter Employee 3", seniority: 21, hours: 40 },
-        { name: "Painter Employee 4", seniority: 22, hours: 32 }
-    ],
-
-    cta: [
-        { name: "CTA Employee", seniority: 18 }
-    ]
-
+let employees = {
+    ci: [],
+    painters: [],
+    cta: []
 };
-
 
 /* NEW YORK DATE */
 
@@ -787,11 +756,43 @@ function buildCTATable() {
 
 /* INITIAL PAGE DISPLAY */
 
-buildDepartmentTable(employees.ci, "ciTable");
 
-buildDepartmentTable(employees.painters, "painterTable");
+/* INITIAL PAGE DISPLAY */
 
-buildCTATable();
+async function initializeEmployeeDisplay() {
+    const notice = document.querySelector(".preview-notice");
+
+    notice.textContent = "Loading employee data...";
+
+    try {
+        employees = await loadEmployees();
+
+        buildDepartmentTable(employees.ci, "ciTable");
+        buildDepartmentTable(employees.painters, "painterTable");
+        buildCTATable();
+
+        const totalEmployees =
+            employees.ci.length +
+            employees.painters.length +
+            employees.cta.length;
+
+        if (totalEmployees === 0) {
+            notice.textContent =
+                "DEVELOPMENT PREVIEW — No active employees in database.";
+        } else {
+            notice.textContent =
+                "DEVELOPMENT PREVIEW — Live employee data loaded.";
+        }
+
+    } catch (error) {
+        console.error("Employee loading failed:", error);
+
+        notice.textContent =
+            "Unable to load employee data. Please refresh the page.";
+    }
+}
+
+initializeEmployeeDisplay();
 
 </script>
 
