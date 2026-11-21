@@ -470,10 +470,10 @@ footer {
                 <thead>
                     <tr>
                         <th class="rank-column">Rank</th>
-                        <th class="tc-column">T/C</th>
                         <th class="name-column">Name</th>
                         <th class="hours-column">Current OT Hours</th>
                         <th class="action-column">Action</th>
+                        <th class="tc-column">T/C</th>
                     </tr>
                 </thead>
 
@@ -494,10 +494,10 @@ footer {
                 <thead>
                     <tr>
                         <th class="rank-column">Rank</th>
-                        <th class="tc-column">T/C</th>
                         <th class="name-column">Name</th>
                         <th class="hours-column">Current OT Hours</th>
                         <th class="action-column">Action</th>
+                        <th class="tc-column">T/C</th>
                     </tr>
                 </thead>
 
@@ -515,8 +515,9 @@ footer {
             <table>
                 <thead>
                     <tr>
-                        <th style="width:75%">Name</th>
-                        <th style="width:25%">Action</th>
+                        <th style="width:70%">Name</th>
+                        <th class="action-column">Action</th>
+                        <th class="tc-column">T/C</th>
                     </tr>
                 </thead>
 
@@ -706,7 +707,7 @@ function buildDepartmentTable(list, tableId) {
         tcDot.title = "No tour change";
 
         tcCell.appendChild(tcDot);
-        row.appendChild(tcCell);
+        
 
         row.appendChild(
             createCell(employee.name, "employee-name")
@@ -719,7 +720,7 @@ function buildDepartmentTable(list, tableId) {
         row.appendChild(
             createCell("—", "empty-action")
         );
-
+        row.appendChild(tcCell);
         table.appendChild(row);
 
     });
@@ -746,7 +747,15 @@ function buildCTATable() {
         row.appendChild(
             createCell("—", "empty-action")
         );
+   const tcCell = document.createElement("td");
+   const tcDot = document.createElement("span");
 
+   tcDot.className = "tc-dot";
+   tcDot.setAttribute("aria-label", "No tour change");
+   tcDot.title = "No tour change";
+
+   tcCell.appendChild(tcDot);
+   row.appendChild(tcCell);
         table.appendChild(row);
 
     });
