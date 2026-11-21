@@ -1678,7 +1678,136 @@ adminLoginCancel.addEventListener("click", () => {
     showPage("callList", homeButton);
 
 });
+/* MANAGE EMPLOYEES TABLE RENDERING */
 
+function renderManageEmployeesTable(
+    tableId,
+    employees,
+    showPrepBooth
+) {
+    const tbody = document.getElementById(tableId);
+
+    tbody.replaceChildren();
+
+    const sortedEmployees = [...employees].sort(
+        (a, b) => Number(a.seniority) -
+                  Number(b.seniority)
+    );
+
+    if (sortedEmployees.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = showPrepBooth ? 4 : 3;
+        cell.textContent = "No employees";
+
+        row.appendChild(cell);
+        tbody.appendChild(row);
+
+        return;
+    }
+
+    sortedEmployees.forEach(employee => {
+
+        const row = document.createElement("tr");
+
+        const seniorityCell = document.createElement("td");
+        seniorityCell.textContent = employee.seniority;
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = employee.name;
+
+        row.appendChild(seniorityCell);
+        row.appendChild(nameCell);
+
+        if (showPrepBooth) {
+            const prepCell = document.createElement("td");
+
+            prepCell.textContent =
+                employee.prep ? "Yes" : "No";
+
+            row.appendChild(prepCell);
+        }
+
+        const actionCell = document.createElement("td");
+
+        const editButton = document.createElement("button");
+
+        editButton.type = "button";
+        editButton.textContent = "Edit";
+        editButton.className = "manage-edit-button";
+        editButton.dataset.employeeId = String(employee.id);
+        editButton.disabled = true;
+
+        const removeButton = document.createElement("button");
+
+        removeButton.type = "button";
+        removeButton.textContent = "Remove";
+        removeButton.className = "manage-remove-button";
+        removeButton.dataset.employeeId = String(employee.id);
+        removeButton.disabled = true;
+
+        actionCell.appendChild(editButton);
+        actionCell.appendChild(removeButton);
+
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
+
+    });
+}
+
+/* END MANAGE EMPLOYEES TABLE RENDERING */
+/* LOAD MANAGE EMPLOYEES DATA */
+
+async function loadManageEmployees() {
+
+    const message = document.getElementById(
+        "manageEmployeesMessage"
+    );
+
+    message.style.color = "#002653";
+    message.textContent = "Loading employees...";
+
+    document.getElementById("manageCITable").replaceChildren();
+    document.getElementById("managePainterTable").replaceChildren();
+    document.getElementById("manageCTATable").replaceChildren();
+
+    try {
+
+        const employees = await loadEmployees();
+
+        renderManageEmployeesTable(
+            "manageCITable",
+            employees.ci,
+            true
+        );
+
+        renderManageEmployeesTable(
+            "managePainterTable",
+            employees.painters,
+            false
+        );
+
+        renderManageEmployeesTable(
+            "manageCTATable",
+            employees.cta,
+            false
+        );
+
+        message.textContent = "";
+
+    } catch (error) {
+
+        message.style.color = "#c62828";
+        message.textContent =
+            "Unable to load employees. Please try again.";
+
+        console.error("Manage Employees:", error);
+
+    }
+}
+
+/* END LOAD MANAGE EMPLOYEES DATA */
 /* MANAGE EMPLOYEES NAVIGATION */
 
 const manageEmployeesButton =
@@ -1712,6 +1841,7 @@ manageEmployeesButton.addEventListener("click", async () => {
         adminDashboard.hidden = true;
         manageEmployeesPage.hidden = false;
 
+await loadManageEmployees();
     } catch (error) {
         alert("Unable to verify administrator session. Please try again.");
 
