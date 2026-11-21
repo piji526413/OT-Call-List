@@ -129,3 +129,40 @@ async function validateAdminSession() {
     return result.valid === true &&
         getAdminToken() === token;
 }
+/* SERVER-SIDE ADMINISTRATOR LOGOUT */
+
+async function adminLogout() {
+    const token = getAdminToken();
+
+    if (!token) {
+        clearAdminSession();
+        return true;
+    }
+
+    const response = await fetch(
+        SUPABASE_FUNCTIONS_URL + "/admin-logout",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_PUBLISHABLE_KEY
+            },
+            body: JSON.stringify({ token: token }),
+            cache: "no-store"
+        }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || result.success !== true) {
+        throw new Error(
+            result.error || "Administrator logout failed."
+        );
+    }
+
+    if (adminSessionToken === token) {
+        clearAdminSession();
+    }
+
+    return true;
+}
