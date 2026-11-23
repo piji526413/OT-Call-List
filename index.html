@@ -970,6 +970,46 @@ footer {
 }
 
 /* END EMPLOYEE FORM PAGE */
+
+/* EDIT EMPLOYEE PAGE */
+
+.save-employee-button {
+    background-color: #1565c0;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+}
+
+.save-employee-button:hover:not(:disabled) {
+    background-color: #0d47a1;
+}
+
+.save-employee-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+#editEmployeeDepartment:disabled {
+    background-color: #e9edf2;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+#editEmployeePage small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* END EDIT EMPLOYEE PAGE */
+
 </style>
  <link rel="stylesheet" href="./admin-login.css">
 </head>
@@ -1608,6 +1648,97 @@ footer {
 
 </div>
 
+<!-- EDIT EMPLOYEE PAGE -->
+<div id="editEmployeePage"
+     class="employee-form-page" hidden>
+
+    <h2 class="employee-form-heading">
+        EDIT EMPLOYEE
+    </h2>
+
+    <form id="editEmployeeForm"
+          class="employee-form">
+
+        <div class="employee-form-field">
+            <label for="editEmployeeName">
+                Employee Name
+            </label>
+            <input type="text"
+                   id="editEmployeeName"
+                   maxlength="150"
+                   required>
+        </div>
+
+        <div class="employee-form-field">
+            <label for="editEmployeeSeniority">
+                Seniority Number
+            </label>
+            <input type="number"
+                   id="editEmployeeSeniority"
+                   min="1"
+                   step="1"
+                   required>
+        </div>
+
+        <div class="employee-form-field">
+            <label for="editEmployeeDepartment">
+                Department
+            </label>
+            <input type="text"
+                   id="editEmployeeDepartment"
+                   disabled>
+            <small>
+                Department cannot be changed.
+            </small>
+        </div>
+
+        <fieldset id="editEmployeePrepField"
+                  class="employee-prep-field">
+
+            <legend>Prep Booth Qualified</legend>
+
+            <label>
+                <input type="radio"
+                       name="editEmployeePrep"
+                       value="true">
+                Yes
+            </label>
+
+            <label>
+                <input type="radio"
+                       name="editEmployeePrep"
+                       value="false"
+                       checked>
+                No
+            </label>
+
+        </fieldset>
+
+        <div id="editEmployeeMessage"
+             role="status"></div>
+
+        <div class="employee-form-buttons">
+
+            <button type="submit"
+                    id="submitEditEmployeeButton"
+                    class="save-employee-button"
+                    disabled>
+                SAVE CHANGES
+            </button>
+
+            <button type="button"
+                    id="cancelEditEmployeeButton"
+                    class="employee-form-cancel-button"
+                    disabled>
+                CANCEL
+            </button>
+
+        </div>
+
+    </form>
+</div>
+<!-- END EDIT EMPLOYEE PAGE -->
+
 <!-- END ADD EMPLOYEE PAGE -->
 </section>
 
@@ -1845,6 +1976,8 @@ const adminLogoutButton = document.getElementById("adminLogoutButton");
 function showAdminDashboard() {
     hideManageEmployeesPage();
     hideAddEmployeePage();
+    hideEditEmployeePage();
+
     adminLoginContainer.hidden = true;
     adminDashboard.hidden = false;
     adminLoginMessage.textContent = "";
@@ -1854,6 +1987,8 @@ function showAdminDashboard() {
 function showAdminLogin() {
     hideManageEmployeesPage();
     hideAddEmployeePage();
+    hideEditEmployeePage();
+
     adminDashboard.hidden = true;
     adminLoginContainer.hidden = false;
     adminPinInput.value = "";
@@ -1986,7 +2121,17 @@ function renderManageEmployeesTable(
         editButton.textContent = "Edit";
         editButton.className = "manage-edit-button";
         editButton.dataset.employeeId = String(employee.id);
-        editButton.disabled = true;
+        editButton.disabled = false;
+
+        editButton.addEventListener("click", async () => {
+    editButton.disabled = true;
+
+    try {
+        await openEditEmployeePage(employee.id);
+    } finally {
+        editButton.disabled = false;
+    }
+});
 
         const removeButton = document.createElement("button");
 
@@ -2411,6 +2556,159 @@ addEmployeeForm.addEventListener("submit", async (event) => {
 submitAddEmployeeButton.disabled = false;
 
 /* END ENABLE ADD EMPLOYEE SUBMISSION */
+
+/* EDIT EMPLOYEE NAVIGATION */
+
+const editEmployeePage =
+    document.getElementById("editEmployeePage");
+
+const editEmployeeForm =
+    document.getElementById("editEmployeeForm");
+
+const editEmployeeName =
+    document.getElementById("editEmployeeName");
+
+const editEmployeeSeniority =
+    document.getElementById("editEmployeeSeniority");
+
+const editEmployeeDepartment =
+    document.getElementById("editEmployeeDepartment");
+
+const editEmployeePrepField =
+    document.getElementById("editEmployeePrepField");
+
+const editEmployeeMessage =
+    document.getElementById("editEmployeeMessage");
+
+const submitEditEmployeeButton =
+    document.getElementById("submitEditEmployeeButton");
+
+const cancelEditEmployeeButton =
+    document.getElementById("cancelEditEmployeeButton");
+
+let selectedEditEmployee = null;
+
+function hideEditEmployeePage() {
+    editEmployeePage.hidden = true;
+    selectedEditEmployee = null;
+}
+
+/* OPEN EDIT EMPLOYEE PAGE */
+
+async function openEditEmployeePage(employeeId) {
+
+    try {
+        const valid = await validateAdminSession();
+
+        if (!valid) {
+            hideEditEmployeePage();
+            showAdminLogin();
+            return;
+        }
+
+        const employees = await loadEmployees();
+
+        const allEmployees = [
+            ...employees.ci,
+            ...employees.painters,
+            ...employees.cta
+        ];
+
+        const employee = allEmployees.find(
+            item => String(item.id) === String(employeeId)
+        );
+
+        if (!employee) {
+            alert("Employee not found or inactive.");
+            await loadManageEmployees();
+            return;
+        }
+
+        selectedEditEmployee = employee;
+
+        editEmployeeForm.reset();
+
+        editEmployeeMessage.textContent = "";
+
+        editEmployeeName.value = employee.name;
+
+        editEmployeeSeniority.value =
+            employee.seniority;
+
+        const departmentNames = {
+            CI: "Car Inspector",
+            Painter: "Painter",
+            CTA: "CTA"
+        };
+
+        editEmployeeDepartment.value =
+            departmentNames[employee.department];
+
+        const isCI = employee.department === "CI";
+
+        editEmployeePrepField.hidden = !isCI;
+        editEmployeePrepField.disabled = !isCI;
+
+        const prepValue =
+            isCI && employee.prep === true
+                ? "true"
+                : "false";
+
+        editEmployeeForm.querySelector(
+            `input[name="editEmployeePrep"][value="${prepValue}"]`
+        ).checked = true;
+
+        manageEmployeesPage.hidden = true;
+        editEmployeePage.hidden = false;
+
+    } catch (error) {
+        alert(
+            "Unable to open employee information. " +
+            "Please try again."
+        );
+    }
+}
+
+/* CANCEL EDIT EMPLOYEE */
+
+cancelEditEmployeeButton.disabled = false;
+
+cancelEditEmployeeButton.addEventListener(
+    "click",
+    async () => {
+
+        cancelEditEmployeeButton.disabled = true;
+
+        try {
+            const valid = await validateAdminSession();
+
+            hideEditEmployeePage();
+
+            if (!valid) {
+                showAdminLogin();
+                return;
+            }
+
+            editEmployeeForm.reset();
+
+            editEmployeeMessage.textContent = "";
+
+            manageEmployeesPage.hidden = false;
+
+            await loadManageEmployees();
+
+        } catch (error) {
+            alert(
+                "Unable to verify administrator session. " +
+                "Please try again."
+            );
+        } finally {
+            cancelEditEmployeeButton.disabled = false;
+        }
+    }
+);
+
+/* END EDIT EMPLOYEE NAVIGATION */
 
 /* ADMINISTRATOR LOGOUT */
 adminLogoutButton.addEventListener("click", async () => {
