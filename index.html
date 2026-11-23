@@ -1621,6 +1621,7 @@ footer {
 <script src="./supabase-config.js"></script>
 <script src="./employee-data.js"></script>
 <script src="./admin-auth.js"></script>
+<script src="employee-admin.js"></script>
 <script>
 
 /* LIVE EMPLOYEE DATA */
@@ -2252,6 +2253,165 @@ addEmployeeForm.addEventListener("reset", () => {
 updateAddEmployeePrepField();
 
 /* END ADD EMPLOYEE DEPARTMENT CONTROLS */
+
+/* ADD EMPLOYEE FORM VALIDATION */
+
+const addEmployeeName =
+    document.getElementById("addEmployeeName");
+
+const addEmployeeSeniority =
+    document.getElementById("addEmployeeSeniority");
+
+const submitAddEmployeeButton =
+    document.getElementById("submitAddEmployeeButton");
+
+function validateAddEmployeeForm() {
+
+    const employeeName = addEmployeeName.value.trim();
+    const seniorityNumber = Number(addEmployeeSeniority.value);
+    const department = addEmployeeDepartment.value;
+
+    if (employeeName.length === 0 ||
+        employeeName.length > 150) {
+
+        throw new Error("Please enter a valid employee name.");
+    }
+
+    if (!Number.isSafeInteger(seniorityNumber) ||
+        seniorityNumber <= 0) {
+
+        throw new Error("Please enter a valid seniority number.");
+    }
+
+    if (!["CI", "Painter", "CTA"].includes(department)) {
+
+        throw new Error("Please select a valid department.");
+    }
+
+    const prepBoothQualified =
+        department === "CI" &&
+        addEmployeeForm.querySelector(
+            'input[name="addEmployeePrep"]:checked'
+        )?.value === "true";
+
+    return {
+        employeeName,
+        seniorityNumber,
+        department,
+        prepBoothQualified
+    };
+}
+
+/* END ADD EMPLOYEE FORM VALIDATION */
+
+/* ADD EMPLOYEE FORM SUBMISSION */
+
+let addEmployeeSubmitting = false;
+
+addEmployeeForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    if (addEmployeeSubmitting) {
+        return;
+    }
+
+    addEmployeeMessage.textContent = "";
+
+    let employee;
+
+    try {
+
+        employee = validateAddEmployeeForm();
+
+    } catch (error) {
+
+        addEmployeeMessage.style.color = "#c62828";
+        addEmployeeMessage.textContent = error.message;
+        return;
+
+    }
+
+    addEmployeeSubmitting = true;
+
+    submitAddEmployeeButton.disabled = true;
+    cancelAddEmployeeButton.disabled = true;
+
+    submitAddEmployeeButton.textContent = "ADDING...";
+
+    let employeeCreated = false;
+
+    try {
+
+        const valid = await validateAdminSession();
+
+        if (!valid) {
+            showAdminLogin();
+            return;
+        }
+
+        await addEmployee(
+            employee.employeeName,
+            employee.seniorityNumber,
+            employee.department,
+            employee.prepBoothQualified
+        );
+
+        employeeCreated = true;
+
+        addEmployeeForm.reset();
+
+        hideAddEmployeePage();
+
+        manageEmployeesPage.hidden = false;
+
+        await loadManageEmployees();
+
+        await initializeEmployeeDisplay();
+
+    } catch (error) {
+
+        if (!hasAdminSession()) {
+
+            showAdminLogin();
+
+        } else if (employeeCreated) {
+
+            alert(
+                "Employee added successfully. " +
+                "Please refresh the webpage to update the lists."
+            );
+
+        } else {
+
+            addEmployeeMessage.style.color = "#c62828";
+
+            addEmployeeMessage.textContent =
+                error.message +
+                " Check Manage Employees before retrying.";
+
+        }
+
+    } finally {
+
+        addEmployeeSubmitting = false;
+
+        submitAddEmployeeButton.disabled = false;
+        cancelAddEmployeeButton.disabled = false;
+
+        submitAddEmployeeButton.textContent = "ADD EMPLOYEE";
+
+    }
+
+});
+
+/* END ADD EMPLOYEE FORM SUBMISSION */
+/* ENABLE ADD EMPLOYEE SUBMISSION */
+
+submitAddEmployeeButton.disabled = false;
+
+/* END ENABLE ADD EMPLOYEE SUBMISSION */
+
 /* ADMINISTRATOR LOGOUT */
 adminLogoutButton.addEventListener("click", async () => {
     adminLogoutButton.disabled = true;
