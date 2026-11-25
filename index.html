@@ -2139,7 +2139,17 @@ function renderManageEmployeesTable(
         removeButton.textContent = "Remove";
         removeButton.className = "manage-remove-button";
         removeButton.dataset.employeeId = String(employee.id);
+        removeButton.disabled = false;
+
+        removeButton.addEventListener("click", async () => {
         removeButton.disabled = true;
+
+  try {
+    await handleRemoveEmployee(employee);
+  } finally {
+    removeButton.disabled = false;
+  }
+});
 
         actionCell.appendChild(editButton);
         actionCell.appendChild(removeButton);
@@ -2882,7 +2892,58 @@ editEmployeeForm.addEventListener(
 submitEditEmployeeButton.disabled = false;
 
 /* END ENABLE EDIT EMPLOYEE SUBMISSION */
+/* REMOVE EMPLOYEE PROCESSING */
 
+let employeeRemovalInProgress = false;
+
+async function handleRemoveEmployee(employee) {
+  if (employeeRemovalInProgress) return;
+
+  const confirmed = confirm(
+    "Are you sure you want to remove " +
+    employee.name + "?"
+  );
+
+  if (!confirmed) return;
+
+  employeeRemovalInProgress = true;
+  let employeeRemoved = false;
+
+  try {
+    const valid = await validateAdminSession();
+
+    if (!valid) {
+      showAdminLogin();
+      return;
+    }
+
+    await removeEmployee(employee.id);
+
+    employeeRemoved = true;
+
+    await loadManageEmployees();
+    await initializeEmployeeDisplay();
+
+  } catch (error) {
+    if (!hasAdminSession()) {
+      showAdminLogin();
+    } else if (employeeRemoved) {
+      alert(
+        "Employee removed successfully. " +
+        "Please refresh the webpage to update the lists."
+      );
+    } else {
+      alert(
+        error.message +
+        " Check Manage Employees before retrying."
+      );
+    }
+  } finally {
+    employeeRemovalInProgress = false;
+  }
+}
+
+/* END REMOVE EMPLOYEE PROCESSING */
 
 
 /* ADMINISTRATOR LOGOUT */
