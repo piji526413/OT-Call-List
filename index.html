@@ -2710,6 +2710,176 @@ cancelEditEmployeeButton.addEventListener(
 
 /* END EDIT EMPLOYEE NAVIGATION */
 
+/* EDIT EMPLOYEE FORM VALIDATION */
+
+function validateEditEmployeeForm() {
+
+    if (!selectedEditEmployee) {
+        throw new Error(
+            "No employee selected."
+        );
+    }
+
+    const employeeId = Number(
+        selectedEditEmployee.id
+    );
+
+    const employeeName =
+        editEmployeeName.value.trim();
+
+    const seniorityNumber =
+        Number(editEmployeeSeniority.value);
+
+    const department =
+        selectedEditEmployee.department;
+
+    if (
+        !Number.isSafeInteger(employeeId) ||
+        employeeId <= 0
+    ) {
+        throw new Error(
+            "Invalid employee ID."
+        );
+    }
+
+    if (
+        employeeName.length === 0 ||
+        employeeName.length > 150
+    ) {
+        throw new Error(
+            "Please enter a valid employee name."
+        );
+    }
+
+    if (
+        !Number.isSafeInteger(seniorityNumber) ||
+        seniorityNumber <= 0
+    ) {
+        throw new Error(
+            "Please enter a valid seniority number."
+        );
+    }
+
+    if (
+        !["CI", "Painter", "CTA"].includes(department)
+    ) {
+        throw new Error(
+            "Invalid employee department."
+        );
+    }
+
+    const prepBoothQualified =
+        department === "CI" &&
+        editEmployeeForm.querySelector(
+            'input[name="editEmployeePrep"]:checked'
+        )?.value === "true";
+
+    return {
+        employeeId,
+        employeeName,
+        seniorityNumber,
+        prepBoothQualified
+    };
+}
+
+/* END EDIT EMPLOYEE FORM VALIDATION */
+
+/* EDIT EMPLOYEE FORM SUBMISSION */
+
+let editEmployeeSubmitting = false;
+
+editEmployeeForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+        if (editEmployeeSubmitting) return;
+
+        editEmployeeMessage.textContent = "";
+
+        let employee;
+
+        try {
+            employee = validateEditEmployeeForm();
+
+        } catch (error) {
+            editEmployeeMessage.style.color = "#c62828";
+            editEmployeeMessage.textContent = error.message;
+            return;
+        }
+
+        editEmployeeSubmitting = true;
+
+        submitEditEmployeeButton.disabled = true;
+        cancelEditEmployeeButton.disabled = true;
+
+        submitEditEmployeeButton.textContent = "SAVING...";
+
+        let employeeUpdated = false;
+
+        try {
+            const valid = await validateAdminSession();
+
+            if (!valid) {
+                showAdminLogin();
+                return;
+            }
+
+            await editEmployee(
+                employee.employeeId,
+                employee.employeeName,
+                employee.seniorityNumber,
+                employee.prepBoothQualified
+            );
+
+            employeeUpdated = true;
+
+            editEmployeeForm.reset();
+
+            hideEditEmployeePage();
+
+            manageEmployeesPage.hidden = false;
+
+            await loadManageEmployees();
+
+            await initializeEmployeeDisplay();
+
+        } catch (error) {
+
+            if (!hasAdminSession()) {
+                showAdminLogin();
+
+            } else if (employeeUpdated) {
+                alert(
+                    "Employee updated successfully. " +
+                    "Please refresh the webpage to update the lists."
+                );
+
+            } else {
+                editEmployeeMessage.style.color = "#c62828";
+
+                editEmployeeMessage.textContent =
+                    error.message +
+                    " Check Manage Employees before retrying.";
+            }
+
+        } finally {
+            editEmployeeSubmitting = false;
+
+            submitEditEmployeeButton.disabled = false;
+            cancelEditEmployeeButton.disabled = false;
+
+            submitEditEmployeeButton.textContent =
+                "SAVE CHANGES";
+        }
+    }
+);
+
+/* END EDIT EMPLOYEE FORM SUBMISSION */
+
+
+
 /* ADMINISTRATOR LOGOUT */
 adminLogoutButton.addEventListener("click", async () => {
     adminLogoutButton.disabled = true;
